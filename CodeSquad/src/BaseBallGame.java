@@ -13,8 +13,8 @@ public class BaseBallGame {
 		num = setNum(num);
 
 		while (result[0] != 3) {
-			//System.out.print("숫자를 입력해 주세요 ex)123 : ");
-			System.out.print("숫자를 입력해 주세요 ex)" + num + " : ");
+			System.out.print("숫자를 입력해 주세요 ex)123 : ");
+			//System.out.print("숫자를 입력해 주세요 ex)" + num + " : ");
 			input = sc.nextLine();
 
 			if (input.length() != 3) {
