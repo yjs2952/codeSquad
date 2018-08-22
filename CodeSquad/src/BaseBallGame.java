@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class BaseBallGame {
 
-	public static final int THREE = 3;
+	public static final int NUMBER_LENGTH = 3;
 
 	public static void main(String[] arg) {
 
@@ -16,14 +16,14 @@ public class BaseBallGame {
 
 		while (true) {
 
-			if (result[0] == THREE) {
+			if (result[0] == NUMBER_LENGTH) {
 
 				System.out.println("3개의 숫자를 모두 맞히셨습니다. 게임을 다시 시작합니다.");
 				num = setNum("");
 			}
 
-			System.out.print("숫자를 입력해 주세요 ex)123 : ");
-			//System.out.print("숫자를 입력해 주세요 ex)" + num + " : ");
+			//System.out.print("숫자를 입력해 주세요 ex)123 : ");
+			System.out.print("숫자를 입력해 주세요 ex)" + num + " : ");
 			
 			input = sc.nextLine();
 
@@ -40,12 +40,16 @@ public class BaseBallGame {
 	public static int[] result(int[] result) {
 		
 		if (result[0] != 0 && result[1] != 0) {
+			
 			System.out.println(result[0] + " 스트라이크 " + result[1] + "볼");
 		} else if (result[0] != 0 && result[1] == 0) {
+			
 			System.out.println(result[0] + " 스트라이크 ");
 		} else if (result[0] == 0 && result[1] != 0) {
+			
 			System.out.println(result[1] + "볼");
 		} else {
+			
 			System.out.println("낫싱");
 		}
 		
@@ -55,7 +59,7 @@ public class BaseBallGame {
 	// 입력값 유효성 검사
 	public static int check(String input) {
 
-		if (input.length() != THREE) {
+		if (input.length() != NUMBER_LENGTH) {
 
 			System.out.println("오류 // 입력값은 3자리수여야 합니다.");
 			return -1;
@@ -77,10 +81,7 @@ public class BaseBallGame {
 		
 		for(int i=0; i<input.length(); i++){
 			
-			for(int j=i+1; j<input.length(); j++) {
-				
-				dupCnt = comparePos(input, i, j, dupCnt);
-			}
+			dupCnt = comparePos(input, i, dupCnt);
 		}
 		
 		if(dupCnt > 0) {
@@ -92,11 +93,14 @@ public class BaseBallGame {
 	}
 	
 	// 생성된 번호 자리수 비교
-	public static int comparePos(String input, int i, int j, int dupCnt) {
+	public static int comparePos(String input, int i, int dupCnt) {
 		
-		if(input.charAt(i) == input.charAt(j)) {
+		for(int j=i+1; j<input.length(); j++) {
 			
-			dupCnt += 1;
+			if(input.charAt(i) == input.charAt(j)) {
+				
+				dupCnt += 1;
+			}
 		}
 		
 		return dupCnt;
@@ -107,7 +111,7 @@ public class BaseBallGame {
 
 		int randomNum = 0;
 
-		while (num.length() < THREE) {
+		while (num.length() < NUMBER_LENGTH) {
 			
 			randomNum = (int) (Math.random() * 9) + 1; // 1 ~ 9 사이의 랜덤 숫자
 			num += String.valueOf(randomNum);
@@ -125,11 +129,18 @@ public class BaseBallGame {
 	public static int[] compareNum(String num1, String num2) {
 
 		int[] result = new int[2];
+		int strikeOrBall = 0;
 		
-		for (int i = 0; i < THREE; i++) {
-			for (int j = 0; j < THREE; j++) {
+		for (int i = 0; i < NUMBER_LENGTH; i++) {
+			
+			strikeOrBall = strikeOrBall(num1, num2, i);
+			
+			if(strikeOrBall == 1) {			// 스트라이크
 				
-				result = strikeOrBall(num1, num2, i, j, result);
+				result[0] += 1;
+			}else if(strikeOrBall == 2) {	// 볼
+				
+				result[1] += 1;
 			}
 		}
 
@@ -137,17 +148,30 @@ public class BaseBallGame {
 	}
 	
 	// 스트라이크 볼 개수 반환
-	public static int[] strikeOrBall(String num1, String num2, int i, int j, int[] result) {
+	public static int strikeOrBall(String num1, String num2, int i) {
 		
-		if (num2.charAt(i) == num1.charAt(j)) {
-			if (i == j) {
-				result[0]++;
-			} else {
-				result[1]++;
+		int result = 0;
+		
+		for (int j = 0; j < NUMBER_LENGTH; j++) {
+			
+			if (num2.charAt(i) == num1.charAt(j)) {
+				
+				result = result(i, j);
 			}
 		}
 		
 		return result;
 	}
-
+	
+	// 결과 합산
+	public static int result(int i, int j) { 
+		
+		if (i == j) {	// 스트라이크
+			
+			return 1;
+		} else {		// 볼
+			
+			return 2;
+		}
+	}
 }
